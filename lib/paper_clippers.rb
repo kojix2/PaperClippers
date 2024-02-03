@@ -2,18 +2,21 @@ require "nokogiri"
 require "fileutils"
 
 class PaperClipper
-  def initialize(html_path, pattern, range_str, output_dir)
+  def initialize(html_path, pattern, range_str = nil, output_dir = nil)
     @html_path = html_path
     @pattern = pattern
     @range_str = range_str
     @output_dir = output_dir || File.basename(html_path, ".*")
-
-    raise "No 数 found. Please check the pattern." unless pattern.include? "数"
   end
 
   def execute
     doc = Nokogiri::HTML(open(@html_path))
-    range = eval(@range_str)
+
+    if @range_str
+      range = eval(@range_str)
+    else
+      range = [""]
+    end
 
     range.each do |i|
       xpath = @pattern.gsub("数", i.to_s)
