@@ -3,7 +3,7 @@ require "fileutils"
 
 class PaperClipper
   # Using keyword arguments to make the method invocation more explicit.
-  def initialize(html_path:, pattern:, range_str: nil, output_dir: nil)
+  def initialize(html_path, pattern, range_str = nil, output_dir = nil)
     @html_path = html_path
     @pattern = pattern
     @range_str = range_str
@@ -16,10 +16,10 @@ class PaperClipper
     range = @range_str ? eval(@range_str) : [""]
 
     # eliminated a redundant iteration using flat_map.
-    doc.flat_map do |i|
+    range.each do |i|
       xpath = @pattern.gsub("数", i.to_s)
       nodes = doc.xpath(xpath)
-      nodes.map { |node| save_node_content(node.inner_html, xpath) }
+      nodes.each { |node| save_node_content(node.inner_html, xpath) }
     end
   end
 
@@ -36,8 +36,11 @@ class PaperClipper
   end
 
   def format_html(html)
-    # combined all gsubs into one
-    html.gsub!(/\R|\t|<(h[1-6]|p|li|dd)/, "\n\\0")
+    # remove any existing newlines or tabs
+    html.gsub!(/\R|\t/, " ")
+    # add a newline before each heading and paragraph
+    html.gsub!(/<(h[1-6]|p|li|dd)/, "\n\\0")
+    # add a newline after each ending heading and paragraph tag
     html.gsub!(%r{</(h[1-6]|p|li|dd)>}, "\\0\n")
 
     # simplified method chaining

@@ -21,8 +21,7 @@ class PaperClipper
     end
 
     def run
-      # use of keyword arguments
-      clipper = PaperClipper.new(@options)
+      clipper = PaperClipper.new(@options[:html_path], @options[:pattern], @options[:range_str], @options[:output_dir])
       clipper.clip # renaming execute to clip is more appropriate in this case
     rescue StandardError => e
       warn(e.message)
