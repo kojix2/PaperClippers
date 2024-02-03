@@ -21,10 +21,10 @@ class PaperClipper
         opts.on("-r", "--range RANGE", "Range") { |v| @options[:range_str] = v } # variable names should match
         # variable names should match
         opts.on("-o", "--output OUTPUT_DIR", "Output directory") do |v|
-          opts.on("-I", "--replace STRING", "Replace string [default: #{@options[:replace_str]}]") do |v|
-            @options[:replace_str] = v
-          end
           @options[:output_dir] = v
+        end
+        opts.on("-I", "--replace STRING", "Replace string [default: #{@options[:replace_str]}]") do |v|
+          @options[:replace_str] = v
         end
       end
 
