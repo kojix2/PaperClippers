@@ -1,6 +1,16 @@
-## PaperClippers
+## PaperClippers - kirinuki
 
 ChatGPTを利用して、自動で論文を翻訳したい
+
+## インストール
+
+このコマンドラインツールは、用途がマイナーであるため、Gemサーバーには公開しません。
+下記のようにソースコードからインストールしてください。
+
+```sh
+gem install specific_install
+gem specific_install https://github.com/kojix2/PaperClippers
+```
 
 ## 基本方針
 
