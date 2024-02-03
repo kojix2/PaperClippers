@@ -3,10 +3,11 @@ require "fileutils"
 require_relative "paper_clippers/version"
 class PaperClipper
   # Using keyword arguments to make the method invocation more explicit.
-  def initialize(html_path, xpath, range_str = nil, output_dir = nil)
+  def initialize(html_path, xpath, range_str = nil, output_dir = nil, replace_str = nil)
     @html_path = html_path
     @xpath = xpath
     @range_str = range_str
+    @replace_str = replace_str
     @output_dir = output_dir || File.basename(html_path, ".*") # Also, basename is already nil-safe
   end
 
@@ -17,7 +18,7 @@ class PaperClipper
 
     # eliminated a redundant iteration using flat_map.
     range.each do |i|
-      xpath = @xpath.gsub("数", i.to_s)
+      xpath = @xpath.gsub(@replace_str, i.to_s) if @replace_str
       nodes = doc.xpath(xpath)
       nodes.each { |node| save_node_content(node.inner_html, xpath) }
     end
