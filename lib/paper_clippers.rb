@@ -14,11 +14,15 @@ class PaperClipper
   def clip
     doc = Nokogiri::HTML(File.open(@html_path))
 
-    range = @range_str ? eval(@range_str) : [""]
+    range = @range_str ? eval(@range_str) : [nil]
 
     # eliminated a redundant iteration using flat_map.
     range.each do |i|
-      xpath = @xpath.gsub(@replace_str, i.to_s) if @replace_str
+      xpath = if @replace_str && i
+                @xpath.gsub(@replace_str, i.to_s)
+              else
+                @xpath
+              end
       nodes = doc.xpath(xpath)
       nodes.each { |node| save_node_content(node.inner_html, xpath) }
     end

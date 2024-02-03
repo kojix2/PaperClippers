@@ -9,7 +9,24 @@ class PaperClippersTest < Test::Unit::TestCase
     end
   end
 
-  test "clip method should save node content to file" do
+  test "clip method should save node content to file without range" do
+    # Prepare test data
+    html_path = File.expand_path("fixtures/test.html", __dir__)
+    xpath = "//div[@class='summary']"
+    output_dir = Dir.mktmpdir
+
+    clipper = PaperClipper.new(html_path, xpath, nil, output_dir, nil)
+    clipper.clip
+
+    expected_contents = "Summary\n" +
+                        "     \n" +
+                        "This is a summary of the paper.\n"
+    file_path = File.join(output_dir, "divclasssummary.txt")
+    assert File.exist?(file_path)
+    assert_equal expected_contents, File.read(file_path)
+  end
+
+  test "clip method should save node content to file with range" do
     # Prepare test data
     html_path = File.expand_path("fixtures/test.html", __dir__)
     xpath = "//div[@class='sec指']"
