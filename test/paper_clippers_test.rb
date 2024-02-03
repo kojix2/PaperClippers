@@ -12,12 +12,12 @@ class PaperClippersTest < Test::Unit::TestCase
   test "clip method should save node content to file" do
     # Prepare test data
     html_path = File.expand_path("fixtures/test.html", __dir__)
-    pattern = "//div[@class='content']"
+    xpath = "//div[@class='content']"
     range_str = nil
     output_dir = Dir.mktmpdir
 
     # Create a PaperClipper instance
-    clipper = PaperClipper.new(html_path, pattern, range_str, output_dir)
+    clipper = PaperClipper.new(html_path, xpath, range_str, output_dir)
 
     # Call the clip method
     clipper.clip

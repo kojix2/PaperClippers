@@ -46,11 +46,11 @@ Firefoxの画面で、論文本文中の「調査」をクリックします。�
 ### ③ファイルの抽出
 
 ```
-Usage: kirinuki [options]
+kirinuki [options]
 
 Example: ruby kirinuki.rb -f 'path/to/your.html' -p '//*[@id="sec数"]' -r '1..12'
     -f, --file HTML_PATH             HTML file path
-    -p, --pattern PATTERN            Pattern
+    -x, --xpath XPATH                XPath
     -r, --range RANGE                Range
     -o, --output OUTPUT_DIR          Output directory
 ```
