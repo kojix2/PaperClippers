@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 
 # Explicitly point to the command_line file
-require_relative "./paper_clippers/command_line"
+require_relative "../lib/paper_clippers/command_line"
 
 PaperClipper::CommandLine.new.run

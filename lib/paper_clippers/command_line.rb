@@ -1,5 +1,5 @@
 require "optparse"
-require_relative "paper_clippers" # better to use relative as it requires less path lookup
+require_relative "../paper_clippers"
 
 class PaperClipper
   class CommandLine
