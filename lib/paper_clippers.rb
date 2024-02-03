@@ -1,6 +1,6 @@
 require "nokogiri"
 require "fileutils"
-
+require_relative "paper_clippers/version"
 class PaperClipper
   # Using keyword arguments to make the method invocation more explicit.
   def initialize(html_path, pattern, range_str = nil, output_dir = nil)
