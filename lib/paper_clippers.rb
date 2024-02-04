@@ -9,7 +9,7 @@ class PaperClipper
     @selector_type = selector_type # :xpath or :css
     @range_str = range_str
     @replace_str = replace_str
-    @output_dir = output_dir || File.basename(html_path, ".*")
+    @output_dir = output_dir || Dir.pwd
   end
 
   def clip

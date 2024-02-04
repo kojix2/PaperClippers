@@ -32,7 +32,9 @@ class PaperClipper
           @options[:selector_type] = :css
         end
         opts.on("-r", "--range RANGE", "Range") { |v| @options[:range_str] = v }
-        opts.on("-o", "--outdir OUTPUT_DIR", "Output directory") { |v| @options[:output_dir] = v }
+        opts.on("-o", "--outdir [OUTPUT_DIR]", "Output directory") do |v|
+          @options[:output_dir] = (v || File.basename(@options[:html_path], ".*"))
+        end
         opts.on("-I", "--replace STRING", "Replace string [default: #{@options[:replace_str]}]") do |v|
           @options[:replace_str] = v
         end
