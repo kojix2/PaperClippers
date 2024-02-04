@@ -12,7 +12,9 @@ class PaperClipper
         replace_str: "{}",
         output_dir: nil
       }
+    end
 
+    def parse_args(args = ARGV)
       @parser = OptionParser.new do |opts|
         opts.banner = "Usage: kirinuki [options]"
         opts.separator ""
@@ -36,18 +38,23 @@ class PaperClipper
         end
       end
 
-      @parser.parse!
+      @parser.parse!(args)
       validate_options!
     end
 
     def run
-      clipper = PaperClipper.new(@options[:html_path], @options[:selector], @options[:range_str], @options[:output_dir],
-                                 @options[:replace_str], selector_type: @options[:selector_type])
-      clipper.clip
+      parse_args
+      clip
     rescue StandardError => e
       warn(@parser)
       warn("\n[kirinuki] Error: #{e.message} (#{e.class}) (#{e.backtrace.first})")
       exit 1
+    end
+
+    def clip
+      clipper = PaperClipper.new(@options[:html_path], @options[:selector], @options[:range_str], @options[:output_dir],
+                                 @options[:replace_str], selector_type: @options[:selector_type])
+      clipper.clip
     end
 
     private
