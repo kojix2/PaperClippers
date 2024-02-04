@@ -1,5 +1,7 @@
 # PaperClippers - kirinuki
 
+[![Ruby](https://github.com/kojix2/PaperClippers/actions/workflows/main.yml/badge.svg)](https://github.com/kojix2/PaperClippers/actions/workflows/main.yml)
+
 ChatGPT を利用して、自動で論文を翻訳します。
 
 ## インストール
