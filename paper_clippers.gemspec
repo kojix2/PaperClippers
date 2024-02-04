@@ -19,5 +19,6 @@ Gem::Specification.new do |spec|
   spec.executables = "kirinuki"
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "colorize"
   spec.add_dependency "nokogiri"
 end
