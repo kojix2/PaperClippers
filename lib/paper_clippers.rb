@@ -1,39 +1,46 @@
 require "nokogiri"
 require "fileutils"
 require_relative "paper_clippers/version"
+
 class PaperClipper
-  # Using keyword arguments to make the method invocation more explicit.
-  def initialize(html_path, xpath, range_str = nil, output_dir = nil, replace_str = nil)
+  def initialize(html_path, selector, range_str = nil, output_dir = nil, replace_str = nil, selector_type: :xpath)
     @html_path = html_path
-    @xpath = xpath
+    @selector = selector
+    @selector_type = selector_type # :xpath or :css
     @range_str = range_str
     @replace_str = replace_str
-    @output_dir = output_dir || File.basename(html_path, ".*") # Also, basename is already nil-safe
+    @output_dir = output_dir || File.basename(html_path, ".*")
   end
 
   def clip
     doc = Nokogiri::HTML(File.open(@html_path))
-
     range = @range_str ? eval(@range_str) : [nil]
 
-    # eliminated a redundant iteration using flat_map.
     range.each do |i|
-      xpath = if @replace_str && i
-                @xpath.gsub(@replace_str, i.to_s)
+      modified_selector = if @replace_str && i
+                            @selector.gsub(@replace_str, i.to_s)
+                          else
+                            @selector
+                          end
+
+      nodes = case @selector_type
+              when :css
+                doc.css(modified_selector)
+              when :xpath
+                doc.xpath(modified_selector)
               else
-                @xpath
+                raise "Unsupported selector type: #{@selector_type}"
               end
-      nodes = doc.xpath(xpath)
-      nodes.each { |node| save_node_content(node.inner_html, xpath) }
+
+      nodes.each { |node| save_node_content(node.inner_html, modified_selector) }
     end
   end
 
   private
 
-  # Encapsulated dir creation and file writing into a separate method
-  def save_node_content(html, xpath)
+  def save_node_content(html, selector)
     html = format_html(html)
-    file_name = xpath.gsub(/[^0-9A-Za-z_]/, "")
+    file_name = selector.gsub(/[^0-9A-Za-z_]/, "")
     dir_path = File.join(@output_dir, "#{file_name}.txt")
 
     FileUtils.mkdir_p(@output_dir)
@@ -41,14 +48,9 @@ class PaperClipper
   end
 
   def format_html(html)
-    # remove any existing newlines or tabs
     html.gsub!(/\R|\t/, " ")
-    # add a newline before each heading and paragraph
     html.gsub!(/<(h[1-6]|p|li|dd)/, "\n\\0")
-    # add a newline after each ending heading and paragraph tag
     html.gsub!(%r{</(h[1-6]|p|li|dd)>}, "\\0\n")
-
-    # simplified method chaining
     Nokogiri::HTML(html).text.strip
   end
 end
