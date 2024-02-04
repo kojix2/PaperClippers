@@ -58,14 +58,14 @@ Firefox の画面で、論文本文中の「調査」をクリックします。
 ```
 kirinuki [options]
 
-Example: ruby kirinuki.rb -f 'path/to/your.html' -p '//*[@id="sec数"]' -r '1..12'
+Example: ruby kirinuki.rb -f 'path/to/your.html' -p '//*[@id="sec{}"]' -r '1..12'
     -f, --file HTML_PATH             HTML file path
     -x, --xpath XPATH                XPath
     -r, --range RANGE                Range
     -o, --output OUTPUT_DIR          Output directory
 ```
 
-例に従って、先ほど作成したツールを実行します。「数」の部分が、range のイテレータの各要素に置き換わります。`range` は `eval` で評価されるため、応用的な使い方も可能です。セキュリティの観点から `eval` はなるべく使わない方が良いとされていますが、今回はローカルのファイルを変換するだけなので問題ありません。
+例に従って、先ほど作成したツールを実行します。「{}」の部分が、range のイテレータの各要素に置き換わります。`range` は `eval` で評価されるため、応用的な使い方も可能です。セキュリティの観点から `eval` はなるべく使わない方が良いとされていますが、今回はローカルのファイルを変換するだけなので問題ありません。
 
 ## ChatGPT を使って翻訳する
 

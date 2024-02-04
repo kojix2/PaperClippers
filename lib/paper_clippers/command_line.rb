@@ -8,14 +8,14 @@ class PaperClipper
         html_path: nil,
         xpath: nil,
         range_str: nil,
-        replace_str: "数",
+        replace_str: "{}",
         output_dir: nil
       }
 
       @parser = OptionParser.new do |opts|
         opts.banner = "kirinuki [options]"
         opts.separator ""
-        opts.separator "Example: ruby kirinuki.rb -f 'path/to/your.html' -x '//*[@id=\"sec数\"]' -r '1..12'"
+        opts.separator "Example: ruby kirinuki.rb -f 'path/to/your.html' -x '//*[@id=\"sec{}\"]' -r '1..12'"
         opts.on("-f", "--file HTML_PATH", "HTML file path") { |v| @options[:html_path] = v }
         opts.on("-x", "--xpath XPATH", "XPath") { |v| @options[:xpath] = v }
         opts.on("-r", "--range RANGE", "Range") { |v| @options[:range_str] = v } # variable names should match
