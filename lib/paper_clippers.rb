@@ -15,6 +15,7 @@ class PaperClipper
   def clip
     doc = Nokogiri::HTML(File.open(@html_path))
     range = @range_str ? eval(@range_str) : [nil]
+    file_paths = []
 
     range.each do |i|
       modified_selector = if @replace_str && i
@@ -32,8 +33,9 @@ class PaperClipper
                 raise "Unsupported selector type: #{@selector_type}"
               end
 
-      nodes.each { |node| save_node_content(node.inner_html, modified_selector) }
+      file_paths << nodes.map { |node| save_node_content(node.inner_html, modified_selector) }
     end
+    file_paths.flatten
   end
 
   private
@@ -41,10 +43,12 @@ class PaperClipper
   def save_node_content(html, selector)
     html = format_html(html)
     file_name = selector.gsub(/[^0-9A-Za-z_]/, "")
-    dir_path = File.join(@output_dir, "#{file_name}.txt")
+    file_path = File.join(@output_dir, "#{file_name}.txt")
 
     FileUtils.mkdir_p(@output_dir)
-    File.open(dir_path, "a") { |f| f.puts html }
+    File.open(file_path, "a") { |f| f.puts html }
+
+    file_path
   end
 
   def format_html(html)
