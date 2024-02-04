@@ -25,7 +25,7 @@ class PaperClippersCommandLineTest < Test::Unit::TestCase
 
     assert(File.exist?(File.join(@output_dir, "classsummary.txt")))
 
-    expected = "Summary\n" + "     \n" + "This is a summary of the paper.\n"
+    expected = "Summary\n     \nThis is a summary of the paper.\n"
 
     assert_equal(expected, File.read(File.join(@output_dir, "classsummary.txt")))
   end

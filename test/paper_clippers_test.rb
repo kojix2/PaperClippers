@@ -22,8 +22,8 @@ class PaperClippersTest < Test::Unit::TestCase
     clipper = PaperClipper.new(@html_path, xpath, nil, @output_dir, nil)
     clipper.clip
 
-    expected_contents = "Summary\n" +
-                        "     \n" +
+    expected_contents = "Summary\n" \
+                        "     \n" \
                         "This is a summary of the paper.\n"
     file_path = File.join(@output_dir, "divclasssummary.txt")
     assert File.exist?(file_path)
@@ -55,8 +55,8 @@ class PaperClippersTest < Test::Unit::TestCase
     clipper = PaperClipper.new(@html_path, css_selector, nil, @output_dir, nil, selector_type: :css)
     clipper.clip
 
-    expected_contents = "Summary\n" +
-                        "     \n" +
+    expected_contents = "Summary\n" \
+                        "     \n" \
                         "This is a summary of the paper.\n"
     file_path = File.join(@output_dir, "summary.txt")
     assert File.exist?(file_path)
