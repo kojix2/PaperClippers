@@ -1,7 +1,8 @@
 require "optparse"
+require "colorize"
 require_relative "../paper_clippers"
 
-class PaperClipper
+class PaperClippers
   class CommandLine
     def initialize
       @options = {
@@ -16,11 +17,15 @@ class PaperClipper
 
     def parse_args(args = ARGV)
       @parser = OptionParser.new do |opts|
-        opts.banner = "Usage: kirinuki [options]"
+        opts.banner = <<~BANNER
+          kirinuki - HTML content clipper
+
+          Usage: kirinuki [options]
+        BANNER
         opts.separator ""
-        opts.separator "Examples:"
-        opts.separator "  kirinuki -f 'path/to/your.html' -x '//*[@id=\"sec{}\"]' -r '1..12'"
-        opts.separator "  kirinuki -f 'path/to/your.html' -c '.section' -o 'output_dir'"
+        opts.separator "Examples:".colorize(:green)
+        opts.separator "  kirinuki -f 'path/to/your.html' -x '//*[@id=\"sec{}\"]' -r '1..12'".colorize(:light_white)
+        opts.separator "  kirinuki -f 'path/to/your.html' -c '.section' -o 'output_dir'".colorize(:light_white)
 
         opts.on("-f", "--file HTML_PATH", "HTML file path") { |v| @options[:html_path] = v }
         opts.on("-x", "--xpath XPATH", "XPath (exclusive with --css)") do |v|
@@ -38,6 +43,14 @@ class PaperClipper
         opts.on("-I", "--replace STRING", "Replace string [default: #{@options[:replace_str]}]") do |v|
           @options[:replace_str] = v
         end
+        opts.on("-h", "--help", "Prints this help") do
+          puts opts
+          exit
+        end
+        opts.on("-v", "--version", "Prints version information") do
+          puts "kirinuki #{PaperClippers::VERSION}"
+          exit
+        end
       end
 
       @parser.parse!(args)
@@ -49,14 +62,20 @@ class PaperClipper
       clip
     rescue StandardError => e
       warn(@parser)
-      warn("\n[kirinuki] Error: #{e.message} (#{e.class}) (#{e.backtrace.first})")
+      warn("\n[kirinuki] Error: #{e.message} (#{e.class})".colorize(:red))
       exit 1
     end
 
     def clip
-      clipper = PaperClipper.new(@options[:html_path], @options[:selector], @options[:range_str], @options[:output_dir],
+      clipper = PaperClippers.new(@options[:html_path], @options[:selector], @options[:range_str], @options[:output_dir],
                                  @options[:replace_str], selector_type: @options[:selector_type])
-      clipper.clip
+      file_paths = clipper.clip
+      if file_paths.empty?
+        warn("[kirinuki] #{'No content found for the given selector.'.colorize(:red).bold}")
+      else
+        puts("[kirinuki] #{'Clipped content has been saved to the following files:'.colorize(:green)}")
+        puts(file_paths.map { |f| "  - #{f}".colorize(:light_white) }.join("\n"))
+      end
     end
 
     private

@@ -2,7 +2,7 @@ require "nokogiri"
 require "fileutils"
 require_relative "paper_clippers/version"
 
-class PaperClipper
+class PaperClippers
   def initialize(html_path, selector, range_str = nil, output_dir = nil, replace_str = nil, selector_type: :xpath)
     @html_path = html_path
     @selector = selector

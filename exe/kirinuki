@@ -3,4 +3,4 @@
 # Explicitly point to the command_line file
 require_relative "../lib/paper_clippers/command_line"
 
-PaperClipper::CommandLine.new.run
+PaperClippers::CommandLine.new.run

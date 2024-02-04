@@ -15,11 +15,11 @@ class PaperClippersCommandLineTest < Test::Unit::TestCase
     $stdout = @stdout
   end
 
-  def test_run_method_should_call_clip_method_of_PaperClipper
+  def test_run_method_should_call_clip_method_of_PaperClippers
     html_path = File.expand_path("fixtures/test.html", __dir__)
     selector = "//*[@class='summary']"
 
-    command_line = PaperClipper::CommandLine.new
+    command_line = PaperClippers::CommandLine.new
     command_line.parse_args(["-f", html_path, "-x", selector, "-o", @output_dir])
     command_line.clip
 
