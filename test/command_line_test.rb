@@ -15,7 +15,7 @@ class PaperClippersCommandLineTest < Test::Unit::TestCase
     $stdout = @stdout
   end
 
-  test "run method should call clip method of PaperClipper" do
+  def test_run_method_should_call_clip_method_of_PaperClipper
     html_path = File.expand_path("fixtures/test.html", __dir__)
     selector = "//*[@class='summary']"
 

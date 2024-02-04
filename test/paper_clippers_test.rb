@@ -11,13 +11,13 @@ class PaperClippersTest < Test::Unit::TestCase
     FileUtils.rm_r(@output_dir)
   end
 
-  test "VERSION" do
+  def test_VERSION
     assert do
       ::PaperClippers.const_defined?(:VERSION)
     end
   end
 
-  test "clip method should save node content to file without range using xpath" do
+  def test_clip_method_should_save_node_content_to_file_without_range_using_xpath
     xpath = "//div[@class='summary']"
     clipper = PaperClipper.new(@html_path, xpath, nil, @output_dir, nil)
     clipper.clip
@@ -30,7 +30,7 @@ class PaperClippersTest < Test::Unit::TestCase
     assert_equal expected_contents, File.read(file_path)
   end
 
-  test "clip method should save node content to file with range using xpath" do
+  def test_clip_method_should_save_node_content_to_file_with_range_using_xpath
     xpath = "//div[@class='sec指']"
     range_str = "1..2"
     replace_str = "指"
@@ -50,7 +50,7 @@ class PaperClippersTest < Test::Unit::TestCase
     end
   end
 
-  test "clip method should save node content to file without range using css selector" do
+  def test_clip_method_should_save_node_content_to_file_without_range_using_css_selector
     css_selector = ".summary"
     clipper = PaperClipper.new(@html_path, css_selector, nil, @output_dir, nil, selector_type: :css)
     clipper.clip
@@ -63,7 +63,7 @@ class PaperClippersTest < Test::Unit::TestCase
     assert_equal expected_contents, File.read(file_path)
   end
 
-  test "clip method should save node content to file with range using css selector" do
+  def test_clip_method_should_save_node_content_to_file_with_range_using_css_selector
     css_selector = "div.sec指"
     range_str = "1..2"
     replace_str = "指"
