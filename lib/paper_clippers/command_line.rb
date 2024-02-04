@@ -68,7 +68,7 @@ class PaperClippers
 
     def clip
       clipper = PaperClippers.new(@options[:html_path], @options[:selector], @options[:range_str], @options[:output_dir],
-                                 @options[:replace_str], selector_type: @options[:selector_type])
+                                  @options[:replace_str], selector_type: @options[:selector_type])
       file_paths = clipper.clip
       if file_paths.empty?
         warn("[kirinuki] #{'No content found for the given selector.'.colorize(:red).bold}")
