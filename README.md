@@ -97,7 +97,7 @@ cat prompt.txt idsec1.txt | chatgpt -M gpt-4 > idsec1_ja.txt
 さらに、連番を使ってシェルスクリプトを作成します。
 
 ```sh
-for i in {1..12}; do cat "prompt.txt" "idsec$i.txt" | chatgpt -M gpt-4 > "idsec${i}_ja.txt"; done
+seq 1 12 | xargs -t -I{} sh -c 'cat prompt.txt idsec{}.txt | chatgpt -M gpt-4 > idsec{}_ja.txt'
 ```
 
 あとは十分に時間をかけて待つことで、翻訳されたテキストファイルが生成されます。
