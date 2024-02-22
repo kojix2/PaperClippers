@@ -10,9 +10,9 @@ class PaperClippers
     @range_str = range_str
     @replace_str = replace_str
     @output_dir = output_dir || Dir.pwd
-    if @selector.include?(@replace_str) && @range_str.nil?
+    if @replace_str && @selector.include?(@replace_str) && @range_str.nil?
       warn "[kirinuki] No range specified"
-    end 
+    end
   end
 
   def clip
