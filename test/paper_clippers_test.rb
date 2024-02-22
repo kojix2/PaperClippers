@@ -17,6 +17,13 @@ class PaperClippersTest < Test::Unit::TestCase
     end
   end
 
+  def test_initialize_with_uri_scheme_should_strip_file_scheme
+    html_path = "file://#{File.expand_path('fixtures/test.html', __dir__)}"
+    xpath = "//div[@class='summary']"
+    clipper = PaperClippers.new(html_path, xpath, nil, @output_dir, nil)
+    assert_equal File.expand_path("fixtures/test.html", __dir__), clipper.instance_variable_get(:@html_path)
+  end
+
   def test_clip_method_should_save_node_content_to_file_without_range_using_xpath
     xpath = "//div[@class='summary']"
     clipper = PaperClippers.new(@html_path, xpath, nil, @output_dir, nil)
