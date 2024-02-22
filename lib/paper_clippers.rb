@@ -64,7 +64,7 @@ class PaperClippers
     Nokogiri::HTML(html).text.strip
   end
 
-  def count_tokens(html)
-    @enc.encode(html).length
+  def count_tokens(text)
+    @enc.encode(text).length
   end
 end
