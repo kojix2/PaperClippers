@@ -12,6 +12,7 @@ class PaperClippers
         range_str: nil,
         replace_str: "{}",
         output_dir: nil,
+        model: "gpt-4",
         debug: false
       }
     end
@@ -44,6 +45,12 @@ class PaperClippers
         opts.on("-I", "--replace STRING", "Replace string [default: #{@options[:replace_str]}]") do |v|
           @options[:replace_str] = v
         end
+        opts.on("-m", "--model MODEL", "Model name for tokenization") do |v|
+          @options[:model] = v
+        end
+        opts.on("-d", "--debug", "Debug mode") do |v|
+          @options[:debug] = v
+        end
         opts.on("-h", "--help", "Prints this help") do
           puts opts
           exit
@@ -70,7 +77,7 @@ class PaperClippers
 
     def clip
       clipper = PaperClippers.new(@options[:html_path], @options[:selector], @options[:range_str], @options[:output_dir],
-                                  @options[:replace_str], selector_type: @options[:selector_type])
+                                  @options[:replace_str], selector_type: @options[:selector_type], model: @options[:model])
       file_paths = clipper.clip
       if file_paths.empty?
         warn("[kirinuki] #{'No content found for the given selector.'.colorize(:red).bold}")
