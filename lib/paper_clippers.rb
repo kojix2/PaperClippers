@@ -1,5 +1,6 @@
 require "nokogiri"
 require "fileutils"
+require "tiktoken_ruby"
 require_relative "paper_clippers/version"
 
 class PaperClippers
@@ -9,10 +10,11 @@ class PaperClippers
     @selector_type = selector_type # :xpath or :css
     @range_str = range_str
     @replace_str = replace_str
-    @output_dir = output_dir || Dir.pwd
     if @replace_str && @selector.include?(@replace_str) && @range_str.nil?
       warn "[kirinuki] No range specified"
     end
+    @output_dir = output_dir || Dir.pwd
+    @enc = Tiktoken.encoding_for_model("gpt-4")
   end
 
   def clip
@@ -38,20 +40,21 @@ class PaperClippers
 
       file_paths << nodes.map { |node| save_node_content(node.inner_html, modified_selector) }
     end
-    file_paths.flatten
+    file_paths.flatten(1)
   end
 
   private
 
   def save_node_content(html, selector)
-    html = format_html(html)
+    content = format_html(html)
+    ntokens = count_tokens(content)
     file_name = selector.gsub(/[^0-9A-Za-z_]/, "")
     file_path = File.join(@output_dir, "#{file_name}.txt")
 
     FileUtils.mkdir_p(@output_dir)
-    File.open(file_path, "a") { |f| f.puts html }
+    File.open(file_path, "a") { |f| f.puts content }
 
-    file_path
+    [file_path, ntokens]
   end
 
   def format_html(html)
@@ -59,5 +62,9 @@ class PaperClippers
     html.gsub!(/<(h[1-6]|p|li|dd)/, "\n\\0")
     html.gsub!(%r{</(h[1-6]|p|li|dd)>}, "\\0\n")
     Nokogiri::HTML(html).text.strip
+  end
+
+  def count_tokens(html)
+    @enc.encode(html).length
   end
 end

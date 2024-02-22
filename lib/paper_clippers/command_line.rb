@@ -74,7 +74,7 @@ class PaperClippers
         warn("[kirinuki] #{'No content found for the given selector.'.colorize(:red).bold}")
       else
         puts("[kirinuki] #{'Clipped content has been saved to the following files:'.colorize(:green)}")
-        puts(file_paths.map { |f| "  - #{f}".colorize(:light_white) }.join("\n"))
+        puts(file_paths.map { |fp, nt| "\t#{nt}\t#{fp}".colorize(:light_white) }.join("\n"))
       end
     end
 
