@@ -11,7 +11,8 @@ class PaperClippers
         selector_type: :xpath, # デフォルトは :xpath とする
         range_str: nil,
         replace_str: "{}",
-        output_dir: nil
+        output_dir: nil,
+        debug: false
       }
     end
 
@@ -61,6 +62,7 @@ class PaperClippers
       parse_args
       clip
     rescue StandardError => e
+      raise e if @options[:debug]
       warn(@parser)
       warn("\n[kirinuki] Error: #{e.message} (#{e.class})".colorize(:red))
       exit 1
