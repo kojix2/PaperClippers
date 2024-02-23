@@ -4,15 +4,14 @@ require "tiktoken_ruby"
 require_relative "paper_clippers/version"
 
 class PaperClippers
-  def initialize(html_path, selector, range_str = nil, output_dir = nil, replace_str = nil, selector_type: :xpath, model: "gpt-4")
+  def initialize(html_path, selector, range_str = nil, output_dir = nil, replace_str = nil, selector_type: :xpath,
+                 model: "gpt-4")
     @html_path = html_path.delete_prefix("file://")
     @selector = selector
     @selector_type = selector_type # :xpath or :css
     @range_str = range_str
     @replace_str = replace_str
-    if @replace_str && @selector.include?(@replace_str) && @range_str.nil?
-      warn "[kirinuki] No range specified"
-    end
+    warn "[kirinuki] No range specified" if @replace_str && @selector.include?(@replace_str) && @range_str.nil?
     @output_dir = output_dir || Dir.pwd
     @enc = Tiktoken.encoding_for_model(model)
   end

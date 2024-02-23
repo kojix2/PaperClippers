@@ -48,6 +48,22 @@ class PaperClippers
         opts.on("-m", "--model MODEL", "Model name for tokenization") do |v|
           @options[:model] = v
         end
+        opts.on("--prompt [PROMPT]", "Prompts for GPT-4") do |v|
+          prompts_dir_path = File.expand_path("../../prompts", __dir__)
+          if v.nil?
+            available_prompts = Dir.glob("#{prompts_dir_path}/*.txt").map { |f| File.basename(f, ".*") }
+            puts "Available prompts:".colorize(:green)
+            puts available_prompts.join("\n")
+          else
+            prompt_file_path = "#{prompts_dir_path}/#{v}.txt"
+            if File.exist?(prompt_file_path)
+              puts File.read(prompt_file_path)
+            else
+              puts "Prompt '#{v}' not found.".colorize(:red)
+            end
+          end
+          exit
+        end
         opts.on("-d", "--debug", "Debug mode") do |v|
           @options[:debug] = v
         end
@@ -70,6 +86,7 @@ class PaperClippers
       clip
     rescue StandardError => e
       raise e if @options[:debug]
+
       warn(@parser)
       warn("\n[kirinuki] Error: #{e.message} (#{e.class})".colorize(:red))
       exit 1
