@@ -102,6 +102,7 @@ class PaperClippers
         puts("[kirinuki] #{'Clipped content has been saved to the following files:'.colorize(:green)}")
         puts(file_paths.map { |fp, nt| "\t#{nt}\t#{fp}".colorize(:light_white) }.join("\n"))
       end
+      puts "Example: seq 1 12 | xargs -t -I{} sh -c 'cat prompt.txt idsec{}.txt | chatgpt -M gpt-4 > idsec{}_ja.txt'"
     end
 
     private
