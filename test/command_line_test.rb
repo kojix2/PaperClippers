@@ -20,7 +20,7 @@ class PaperClippersCommandLineTest < Test::Unit::TestCase
     selector = "//*[@class='summary']"
 
     command_line = PaperClippers::CommandLine.new
-    command_line.parse_args(["-f", html_path, "-x", selector, "-o", @output_dir])
+    command_line.parse_args(["-f", html_path, "-x", selector, "--outdir", @output_dir])
     command_line.clip
 
     assert(File.exist?(File.join(@output_dir, "classsummary.txt")))

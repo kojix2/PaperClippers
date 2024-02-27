@@ -20,13 +20,13 @@ class PaperClippersTest < Test::Unit::TestCase
   def test_initialize_with_uri_scheme_should_strip_file_scheme
     html_path = "file://#{File.expand_path('fixtures/test.html', __dir__)}"
     xpath = "//div[@class='summary']"
-    clipper = PaperClippers.new(html_path, xpath, nil, @output_dir, nil)
+    clipper = PaperClippers.new(html_path, xpath, nil, nil, @output_dir, nil)
     assert_equal File.expand_path("fixtures/test.html", __dir__), clipper.instance_variable_get(:@html_path)
   end
 
   def test_clip_method_should_save_node_content_to_file_without_range_using_xpath
     xpath = "//div[@class='summary']"
-    clipper = PaperClippers.new(@html_path, xpath, nil, @output_dir, nil)
+    clipper = PaperClippers.new(@html_path, xpath, nil, nil, @output_dir, nil)
     clipper.clip
 
     expected_contents = "Summary\n" \
@@ -41,8 +41,9 @@ class PaperClippersTest < Test::Unit::TestCase
     xpath = "//div[@class='sec指']"
     range_str = "1..2"
     replace_str = "指"
+    output_file = "out指.txt"
 
-    clipper = PaperClippers.new(@html_path, xpath, range_str, @output_dir, replace_str)
+    clipper = PaperClippers.new(@html_path, xpath, range_str, output_file, @output_dir, replace_str)
     clipper.clip
 
     expected_contents = [
@@ -51,7 +52,7 @@ class PaperClippersTest < Test::Unit::TestCase
     ]
 
     expected_contents.each_with_index do |expected_content, index|
-      file_path = File.join(@output_dir, "divclasssec#{index + 1}.txt")
+      file_path = File.join(@output_dir, "out#{index + 1}.txt")
       assert File.exist?(file_path)
       assert_equal expected_content, File.read(file_path)
     end
@@ -59,7 +60,7 @@ class PaperClippersTest < Test::Unit::TestCase
 
   def test_clip_method_should_save_node_content_to_file_without_range_using_css_selector
     css_selector = ".summary"
-    clipper = PaperClippers.new(@html_path, css_selector, nil, @output_dir, nil, selector_type: :css)
+    clipper = PaperClippers.new(@html_path, css_selector, nil, nil, @output_dir, nil, selector_type: :css)
     clipper.clip
 
     expected_contents = "Summary\n" \
@@ -74,8 +75,10 @@ class PaperClippersTest < Test::Unit::TestCase
     css_selector = "div.sec指"
     range_str = "1..2"
     replace_str = "指"
+    output_file = "out指.txt"
 
-    clipper = PaperClippers.new(@html_path, css_selector, range_str, @output_dir, replace_str, selector_type: :css)
+    clipper = PaperClippers.new(@html_path, css_selector, range_str, output_file, @output_dir, replace_str,
+                                selector_type: :css)
     clipper.clip
 
     expected_contents = [
@@ -84,7 +87,7 @@ class PaperClippersTest < Test::Unit::TestCase
     ]
 
     expected_contents.each_with_index do |expected_content, index|
-      file_path = File.join(@output_dir, "divsec#{index + 1}.txt")
+      file_path = File.join(@output_dir, "out#{index + 1}.txt")
       assert File.exist?(file_path)
       assert_equal expected_content, File.read(file_path)
     end
