@@ -11,6 +11,7 @@ class PaperClippers
         selector_type: :xpath, # デフォルトは :xpath とする
         range_str: nil,
         replace_str: "{}",
+        output_file: nil,
         output_dir: nil,
         model: "gpt-4",
         debug: false
@@ -39,7 +40,8 @@ class PaperClippers
           @options[:selector_type] = :css
         end
         opts.on("-r", "--range RANGE", "Range") { |v| @options[:range_str] = v }
-        opts.on("-o", "--outdir [OUTPUT_DIR]", "Output directory") do |v|
+        opts.on("-o", "--output FILE", "Output file name") { |v| @options[:output_file] = v }
+        opts.on("--outdir [OUTPUT_DIR]", "Output directory") do |v|
           @options[:output_dir] = (v || File.basename(@options[:html_path], ".*"))
         end
         opts.on("-I", "--replace STRING", "Replace string [default: #{@options[:replace_str]}]") do |v|
@@ -93,7 +95,8 @@ class PaperClippers
     end
 
     def clip
-      clipper = PaperClippers.new(@options[:html_path], @options[:selector], @options[:range_str], @options[:output_dir],
+      clipper = PaperClippers.new(@options[:html_path], @options[:selector], @options[:range_str],
+                                  @options[:output_file], @options[:output_dir],
                                   @options[:replace_str], selector_type: @options[:selector_type], model: @options[:model])
       file_paths = clipper.clip
       if file_paths.empty?
