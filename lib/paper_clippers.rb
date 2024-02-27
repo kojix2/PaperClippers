@@ -18,9 +18,10 @@ class PaperClippers
   end
 
   def clip
-    doc = Nokogiri::HTML(File.open(@html_path))
+    doc = Nokogiri::HTML(File.read(@html_path))
     range = @range_str ? eval(@range_str) : [nil]
     file_paths = []
+    FileUtils.mkdir_p(@output_dir)
 
     range.each do |i|
       modified_selector = \
@@ -60,7 +61,6 @@ class PaperClippers
 
     file_path = File.join(@output_dir, file_name)
 
-    FileUtils.mkdir_p(@output_dir)
     File.open(file_path, "a") { |f| f.puts content }
 
     [file_path, ntokens]
