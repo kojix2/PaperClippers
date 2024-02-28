@@ -19,6 +19,8 @@ gem specific_install https://github.com/kojix2/PaperClippers
 1. [Zotero](https://www.zotero.org/) を使ってウェブページのスナップショットを取る
 2. Ruby の [Nokogiri](https://github.com/sparklemotion/nokogiri) を使って論文を分割して保存する
 3. ChatGPT の API 版で翻訳する
+4. 生成されたテキストファイルの統合、マークダウン化
+5. Pandocによる日本語PDF/DOCXの生成 
 
 ## 利用するツール
 
