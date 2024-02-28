@@ -6,7 +6,8 @@ ChatGPT を利用して、自動で論文を翻訳します。
 
 ## インストール
 
-このツールは Gem サーバーに公開しません。ソースコードからインストールしてください。
+このツールは私がGitHubにアップロードしている他の多くのツールと違いkojix2の個人用ツールです。
+Gem サーバーには公開しません。ソースコードからインストールしてください。
 
 ```sh
 gem install specific_install
@@ -100,6 +101,22 @@ seq 1 12 | xargs -t -I{} sh -c 'cat prompt.txt idsec{}.txt | chatgpt -M gpt-4 > 
 
 あとは十分に時間をかけて待つことで、翻訳されたテキストファイルが生成されます。
 このプロセスはかなり時間がかかりますので、根気よく待ちましょう。
+
+## 生成されたファイルから不要な文字を取り除く
+
+https://github.com/kojix2/bleach
+
+## ファイルの統合でMarkdownを作成し、Prettierで修正
+
+ファイルの統合は単にcatコマンドを使い、自動修正はVSCodeの機能を利用する
+
+## PDFやDOCXの作成
+
+dockerを利用する具体的には
+
+```
+kirinuki --prompt pandoc
+```
 
 ## 最後に
 
