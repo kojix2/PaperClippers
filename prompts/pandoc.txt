@@ -1,0 +1,5 @@
+docker run -it --rm -v $(pwd):/data kojix2/pandoc-japanese \
+  -V linkcolor=blue \
+  -V documentclass=ltjsarticle \
+  -V luatexjapresetoptions=fonts-noto-cjk
+  input.md -o output.pdf
