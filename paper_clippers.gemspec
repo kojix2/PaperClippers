@@ -12,7 +12,6 @@ Gem::Specification.new do |spec|
   spec.description = "Crop papers from local HTML"
   spec.homepage = "https://github.com/kojix2/PaperClippers"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.6.0"
 
   spec.files = Dir["*.{md,txt}", "{lib,exe,prompts}/**/*"]
   spec.bindir = "exe"

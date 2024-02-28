@@ -23,6 +23,8 @@ class PaperClippers
     file_paths = []
     FileUtils.mkdir_p(@output_dir)
 
+    keta = range.all? { |i| i.is_a?(Integer) } ? range.max.to_s.length : nil
+
     range.each do |i|
       modified_selector = \
         if @replace_str && i
@@ -32,7 +34,11 @@ class PaperClippers
         end
       file_name = \
         if @output_file && @replace_str && i
-          @output_file.gsub(@replace_str, i.to_s)
+          if keta
+            @output_file.gsub(@replace_str, i.to_s.rjust(keta, "0"))
+          else
+            @output_file.gsub(@replace_str, i.to_s)
+          end
         elsif @output_file
           @output_file
         else
