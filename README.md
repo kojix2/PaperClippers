@@ -101,6 +101,8 @@ cat prompt.txt idsec1.txt | chatgpt -M gpt-4 > idsec1_ja.txt
 seq 1 12 | xargs -t -I{} sh -c 'cat prompt.txt idsec{}.txt | chatgpt -M gpt-4 > idsec{}_ja.txt'
 ```
 
+FIXME: 連番はナチュラルソートしにくいという問題がある。命名規則を規約化する、連番のつけかたを00xのようにする、ファイルの生成時間順にするなどの工夫が必要
+
 あとは十分に時間をかけて待つことで、翻訳されたテキストファイルが生成されます。
 このプロセスはかなり時間がかかりますので、根気よく待ちましょう。
 
