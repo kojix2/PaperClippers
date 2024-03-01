@@ -1,0 +1,1 @@
+seq 1 12 | xargs -t -I{} sh -c 'cat prompt.txt idsec{}.txt | chatgpt -M gpt-4 > idsec{}_ja.txt'
