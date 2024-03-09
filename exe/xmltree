@@ -1,0 +1,98 @@
+require 'nokogiri'
+require 'optparse'
+require 'open-uri'
+
+class XMLTree
+  def initialize
+    @options = {
+      depth: nil,
+      ignore: [],
+      color: false,
+      show_attributes: false
+    }
+  end
+
+  def parse_options
+    OptionParser.new do |opts|
+      opts.banner = "Usage: xmltree.rb [options]"
+
+      opts.on("-f", "--file FILE", "Specify the XML/HTML file to parse") do |file|
+        @options[:file] = file
+      end
+
+      opts.on("-u", "--url URL", "Specify the URL of the XML/HTML content to parse") do |url|
+        @options[:url] = url
+      end
+
+      opts.on("-d", "--depth DEPTH", Integer, "Specify the depth of the tree to display") do |depth|
+        @options[:depth] = depth
+      end
+
+      opts.on("-i", "--ignore TAGS", "Specify tags to ignore (comma-separated)") do |tags|
+        @options[:ignore] = tags.split(',')
+      end
+
+      opts.on("-c", "--color", "Colorize the output") do
+        @options[:color] = true
+      end
+
+      opts.on("-a", "--attributes", "Show node attributes") do
+        @options[:show_attributes] = true
+      end
+
+      opts.on("-h", "--help", "Prints this help") do
+        puts opts
+        exit
+      end
+    end.parse!
+  end
+
+  def load_document
+    raise ArgumentError, "Please specify a file or URL" unless @options[:file] || @options[:url]
+
+    if @options[:file]
+      Nokogiri::HTML(File.open(@options[:file]))
+    else
+      Nokogiri::HTML(URI.open(@options[:url]))
+    end
+  rescue OpenURI::HTTPError => e
+    raise "Failed to load URL: #{e.message}"
+  rescue Errno::ENOENT => e
+    raise "File not found: #{e.message}"
+  end
+
+  def print_attributes(node)
+    node.attributes.values.map { |attr| "#{attr.name}=\"#{attr.value}\"" }.join(" ")
+  end
+
+  def print_node(node, prefix = "", is_last = true)
+    return if @options[:depth] && prefix.length / 4 > @options[:depth]
+
+    line_prefix = is_last ? "└── " : "├── "
+    node_details = @options[:color] ? "\e[34m#{node.name}\e[0m" : node.name
+    node_details += " [#{print_attributes(node)}]" if @options[:show_attributes] && !node.attributes.empty?
+
+    puts "#{prefix}#{line_prefix}#{node_details}"
+
+    children = node.children.reject { |child| child.text? || child.cdata? || @options[:ignore].include?(child.name) }
+    children.each_with_index do |child, index|
+      new_prefix = prefix + (is_last ? "    " : "│   ")
+      print_node(child, new_prefix, index == children.size - 1)
+    end
+  end
+
+  def run
+    parse_options
+    # 引数が指定されていない場合にヘルプを表示して異常終了
+    if @options[:file].nil? && @options[:url].nil?
+      puts "Error: No file or URL specified."
+      puts "For help, run: xmltree.rb --help"
+      exit 1 # 異常終了ステータスで終了
+    end
+
+    document = load_document
+    print_node(document.root)
+  end
+end
+
+XMLTree.new.run

@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["*.{md,txt}", "{lib,exe,prompts}/**/*"]
   spec.bindir = "exe"
-  spec.executables = "kirinuki"
+  spec.executables = %w[kirinuki xmltree]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "colorize"
