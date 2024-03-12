@@ -1,5 +1,6 @@
-docker run -it --rm -v $(pwd):/data kojix2/pandoc-japanese \
+docker run --platform linux/amd64 -it --rm -v $(pwd):/data kojix2/pandoc-japanese \
+  --pdf-engine=lualatex \
   -V linkcolor=blue \
   -V documentclass=ltjsarticle \
-  -V luatexjapresetoptions=fonts-noto-cjk
+  -V luatexjapresetoptions=fonts-noto-cjk \
   input.md -o output.pdf
