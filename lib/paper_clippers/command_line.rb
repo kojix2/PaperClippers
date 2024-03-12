@@ -50,7 +50,7 @@ class PaperClippers
         opts.on("-m", "--model MODEL", "Model name for tokenization") do |v|
           @options[:model] = v
         end
-        opts.on("--prompt [PROMPT]", "Prompts for GPT-4") do |v|
+        opts.on("--prompts [PROMPT]", "Prompts for GPT-4") do |v|
           prompts_dir_path = File.expand_path("../../prompts", __dir__)
           if v.nil?
             available_prompts = Dir.glob("#{prompts_dir_path}/*.txt").map { |f| File.basename(f, ".*") }
